@@ -42,22 +42,29 @@ public:
     }
     throw std::runtime_error("Solution not found");
   }
+  bool checkExample()
+  {
+    std::vector<int> nums = { 2, 7, 11, 15 };
+    int target = { 9 };
+    std::vector<int> check = { 0, 1 };
+
+    Solution solution;
+    std::vector<int> result = solution.twoSum(nums, target);
+
+    std::sort(result.begin(), result.end());
+    if (result.size() == check.size())
+      if (result[0] == check[0] && result[1] == check[1])
+        return true;
+
+    return false;
+  }
 };
 
 
 int main()
 {
-  std::vector<int> nums = { 2, 7, 11, 15 };
-  int target = { 9 };
-  std::vector<int> check = { 0, 1 };
-
   Solution solution;
-  std::vector<int> result = solution.twoSum(nums, target);
-
-  std::sort(result.begin(), result.end());
-  if (result.size() == check.size())
-    if (result[0] == check[0] && result[1] == check[1])
-      std::cout << "Ok" << std::endl;
+  solution.checkExample();
 
   return 0;
 }
