@@ -1,0 +1,133 @@
+/*
+5. Longest Palindromic Substring
+
+Given a string s, find the longest palindromic substring in s.You may assume that the maximum length of s is 1000.
+
+Example:
+
+Input: "babad"
+
+  Output : "bab"
+
+  Note : "aba" is also a valid answer.
+
+
+
+  Example :
+
+  Input : "cbbd"
+
+  Output : "bb"
+*/
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+static const auto ______ = []() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  return nullptr;
+}();
+
+class Solution {
+public:
+  string longestPalindrome(string s) {
+    vector<int> depth(s.size(), 0);
+    for (int c_depth = 0; c_depth < s.size(); ++c_depth) {
+      for (int i = 0; i < s.size(); ++i) {
+        if (depth[i] >= c_depth) {
+          if (checkNeighbours(s, i, c_depth + 1))
+            depth[i]++;
+        }
+      }
+    }
+    const auto i_depth = getIndexOfMaxDepth(depth);
+    const auto max_length = 2 * depth[i_depth] + 1;
+    /*for (int i = 0; i < depth.size(); ++i)
+    std::cout << depth[i] << std::endl;
+    std::cout << i_depth << std::endl;*/
+
+    vector<int> depth_even(s.size(), 0);
+    for (int c_depth = 0; c_depth < s.size(); ++c_depth) {
+      for (int i = 0; i < s.size(); ++i) {
+        if (depth_even[i] >= c_depth) {
+          if (checkEvenNeighbours(s, i, c_depth + 1))
+            depth_even[i]++;
+        }
+      }
+    }
+    const auto i_depth_even = getIndexOfMaxDepth(depth_even);
+    const auto max_length_even = 2 * depth_even[i_depth_even];
+    /*for (int i = 0; i < depth_even.size(); ++i)
+    std::cout << depth_even[i] << std::endl;
+    std::cout << i_depth_even << std::endl;*/
+
+    string result("");
+    if (max_length > max_length_even)
+      result = string(s.begin() + i_depth - depth[i_depth], s.begin() + i_depth + 1 + depth[i_depth]);
+    else
+      result = string(s.begin() + i_depth_even - depth_even[i_depth_even], s.begin() + i_depth_even + depth_even[i_depth_even]);
+
+    //std::cout << result << std::endl;
+    return result;
+  }
+  bool checkExample()
+  {
+    using VSType = vector<string>;
+    VSType vstr = { "cbbd", "babad", "a" , "abadd" };
+
+    VSType result;
+    for (const auto& it_vstr : vstr)
+      result.push_back(longestPalindrome(it_vstr));
+
+    VSType check = { "bb", "bab", "a" , "aba" };
+    bool is_ok(true);
+    for (VSType::size_type i = 0; i < check.size(); ++i)
+      is_ok &= result[i] == check[i];
+
+    return is_ok;
+  }
+private:
+  bool checkNeighbours(const string& s, const int& i, const int& c_depth) {
+    const auto i_l = i - c_depth;
+    const auto i_r = i + c_depth;
+    if (i_l >= 0 && i_l < s.size())
+      if (i_r >= 0 && i_r < s.size())
+        if (s[i_l] == s[i_r])
+          return true;
+
+    return false;
+  }
+  bool checkEvenNeighbours(const string& s, const int& i, const int& c_depth) {
+    const auto i_l = i - c_depth;
+    const auto i_r = i + c_depth - 1;
+    if (i_l >= 0 && i_l < s.size())
+      if (i_r >= 0 && i_r < s.size())
+        if (s[i_l] == s[i_r])
+          return true;
+
+    return false;
+  }
+  int getIndexOfMaxDepth(const vector<int>& depth) {
+    int m_depth(-1);
+    int result(-1);
+    for (int i = 0; i<depth.size(); ++i)
+      if (depth[i] > m_depth) {
+        m_depth = depth[i];
+        result = i;
+      }
+    return result;
+  }
+};
+
+
+int main()
+{
+  Solution solution;
+  solution.checkExample();
+
+  return 0;
+}
