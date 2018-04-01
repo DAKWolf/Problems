@@ -1,0 +1,80 @@
+/*
+11. Container With Most Water
+
+Given n non-negative integers a1, a2, ..., an, 
+where each represents a point at coordinate (i, ai). 
+n vertical lines are drawn such that the two endpoints
+of line i is at (i, ai) and (i, 0). Find two lines, 
+which together with x-axis forms a container, 
+such that the container contains the most water.
+
+Note: You may not slant the container and n is at least 2.
+*/
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+static const auto ______ = []() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  return nullptr;
+}();
+
+class Solution {
+public:
+  int maxArea(const vector<int>& height) {
+    int water = 0;
+    int i = 0, j = height.size() - 1;
+    while (i < j) {
+      int h = min(height.at(i), height.at(j));
+      water = max(water, (j - i) * h);
+      while (height.at(i) <= h && i < j) i++;
+      while (height.at(j) <= h && i < j) j--;
+    }
+    return water;
+  }
+  /*int maxArea(vector<int>& height) {
+  int bestI(0), bestJ(0);
+  double bestS(0);
+  for (vector<int>::size_type i=0; i<height.size(); ++i) {
+  int k = height[i] > 0 ? bestS / height[i] : 0;
+  for (vector<int>::size_type j=(i+k); j<height.size(); ++j) {
+  double s = (j - i) * min(height[i],height[j]);
+  if (s > bestS) {
+  bestS = s;
+  bestI = i;
+  bestJ = j;
+  }
+  }
+  }
+  return bestS;
+  }*/
+  bool checkExample()
+  {
+    using VIType = vector<int>;
+    using VVIType = vector<vector<int>>;
+    VVIType vstr = { vector<int>{1, 1}, vector<int>{5, 4, 3, 2, 1} };
+
+    VIType result;
+    for (const auto& it_vstr : vstr)
+      result.push_back(maxArea(it_vstr));
+
+    VIType check = { 1, 6 };
+    bool is_ok(true);
+    for (VIType::size_type i = 0; i < check.size(); ++i)
+      is_ok &= result[i] == check[i];
+
+    return is_ok;
+  }
+};
+
+int main()
+{
+  Solution solution;
+  solution.checkExample();
+
+  return 0;
+}
