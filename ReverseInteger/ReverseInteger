@@ -1,0 +1,109 @@
+/*
+7. Reverse Integer
+
+Given a 32-bit signed integer, reverse digits of an integer.
+
+Example 1:
+
+Input: 123
+Output:  321
+
+Example 2:
+
+Input: -123
+Output: -321
+
+Example 3:
+
+Input: 120
+Output: 21
+
+Note:
+Assume we are dealing with an environment which could only hold integers within the 32-bit signed integer range. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.
+*/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+static const auto ______ = []() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  return nullptr;
+}();
+
+class Solution {
+public:
+  int reverse(int x) {
+    int result(0);
+    int pr(0);
+    while (x)
+    {
+      pr = result * 10 + x % 10;
+      if (result != pr / 10) return 0;
+      result = pr;
+      x /= 10;
+    }
+    return result;
+  }
+  /*int reverse(int x) {
+    if (x == 0)
+      return 0;
+
+    const auto max_int = std::numeric_limits<int>::max();
+    if (x < -max_int)
+      return 0;
+
+    int y(fabs(x));
+    const int num_digits = static_cast<int>(log10(y)) + 1;
+    const int t1 = y % 10;
+    const int t2 = max_int / pow(10, num_digits - 1);
+    if (t1 > t2)
+      return 0;
+
+    int counter(0);
+    vector<int> digits(num_digits, 0);
+    while (y != 0) {
+      digits[counter] = y % 10;
+      y = (y - digits[counter]) / 10;
+      counter++;
+    }
+
+    int result(0);
+    for (int i = 0; i < num_digits; ++i) {
+      int result_delta = digits[i] * pow(10, num_digits - 1 - i);
+      if (result > (max_int - result_delta)) {
+        result = 0;
+        break;
+      }
+      result += digits[i] * pow(10, num_digits - 1 - i);
+    }
+    return x > 0 ? result : -result;
+  }*/
+  bool checkExample()
+  {
+    using VIType = vector<int>;
+    VIType vstr = { 321, 2147483647, 2147483641 , -2147483641, -2147483647, 1563847412 };
+
+    VIType result;
+    for (const auto& it_vstr : vstr)
+      result.push_back(reverse(it_vstr));
+
+    VIType check = { 123, 0, 1463847412, -1463847412, 0, 0 };
+    bool is_ok(true);
+    for (VIType::size_type i = 0; i < check.size(); ++i)
+      is_ok &= result[i] == check[i];
+
+    return is_ok;
+  }
+};
+
+
+int main()
+{
+Solution solution;
+solution.checkExample();
+
+return 0;
+}
