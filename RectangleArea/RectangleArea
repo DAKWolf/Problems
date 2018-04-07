@@ -1,0 +1,42 @@
+/*
+223. Rectangle Area
+
+Find the total area covered by two rectilinear rectangles in a 2D plane.
+Each rectangle is defined by its bottom left corner and top right corner as shown in the figure.
+
+Assume that the total area is never beyond the maximum possible value of int.
+*/
+
+static const auto ______ = []() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  return nullptr;
+}();
+
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int s = fabs(C-A)*fabs(D-B) + fabs(G-E)*fabs(H-F) - intersectionArea(A, B, C, D, E, F, G, H); // (3+3)*(4-0) + (9-0)*(2+1) - 6 = 24+27-6=45;
+        return s;
+    }
+    int intersectionArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        // (A, B) (C, B) (C, D) (A, D)
+        // (E, F) (G, F) (G, H) (D, H)
+        // x-coords A, C, E, G -> {-3, 3, 0, 9}
+        // y-coords B, D, F, H -> {0, 4, -1, 2}
+        if (max(A, C) < min (E, G))
+            return 0;
+        if (min(A, C) > max (E, G))
+            return 0;
+        if (max(B, D) < min (F, H))
+            return 0;
+        if (min(B, D) > max (F, H))
+            return 0;
+        std::vector<int> vx = {A, C, E, G};
+        std::vector<int> vy = {B, D, F, H};
+        std::sort(vx.begin(), vx.end()); // {-3, 0, 3, 9}
+        std::sort(vy.begin(), vy.end()); // {-1, 0, 2, 4}
+        int s = (vx[2] - vx[1]) * (vy[2] - vy[1]); // (3-0)*(2-0) = 6;
+        return s;
+    }
+};
